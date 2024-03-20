@@ -1,6 +1,6 @@
 #ifndef LISTS
 #define LISTS
-#define TABLE_LEN 40
+#define TABLE_LEN 75
 typedef struct table_st {
   struct table_st *next;
   char question[TABLE_LEN];

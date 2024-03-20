@@ -6,8 +6,8 @@
 #include <time.h>
 enum status_ { NONE = 0, QUESTION = 1, Q1 = 2, Q2 = 3, Q3 = 4, Q4 = 5 };
 void strcopy(const char *a, char *b, const unsigned int padding) {
-  int x = 0 + padding;
-  for (; x < TABLE_LEN; x++) {
+  int x = padding;
+  for (; x < TABLE_LEN || a[x + 1] == 0; x++) {
     if (a[x] == '_')
       b[x - padding] = ' ';
     else
@@ -16,17 +16,22 @@ void strcopy(const char *a, char *b, const unsigned int padding) {
   b[x + 1 - padding] = 0;
 }
 void addQ(char index, char *text, const unsigned int is_true, LIST_ *lista) {
+  // printf("> %d\n", index);
   switch (index) {
   case Q1:
+    // strcpy(&(lista->q1[0]), text);
     strcopy(text, &(lista->q1[0]), is_true);
     break;
   case Q2:
+    // strcpy(&(lista->q2[0]), text);
     strcopy(text, &(lista->q2[0]), is_true);
     break;
   case Q3:
+    // strcpy(&(lista->q3[0]), text);
     strcopy(text, &(lista->q3[0]), is_true);
     break;
   case Q4:
+    // strcpy(&(lista->q4[0]), text);
     strcopy(text, &(lista->q4[0]), is_true);
     break;
   }
@@ -90,10 +95,12 @@ int readQuestion(char *path, LIST_ *lista, const unsigned int level) {
   while (!feof(file)) {
 
     fscanf(file, "%s", buffor);
+    // printf("> %s\n", buffor);
     if (buffor[0] == '-')
       index++;
     if (index != level)
       continue;
+    buffor[TABLE_LEN - 1] = 0;
     switch (buffor[0]) {
     case '|':
       status++;
@@ -101,6 +108,7 @@ int readQuestion(char *path, LIST_ *lista, const unsigned int level) {
       break;
     case '-':
       status = QUESTION;
+      // strcpy(&(lista->question[0]), &buffor[0]);
       strcopy(&buffor[0], &(lista->question[0]), 1);
       break;
     default:
@@ -112,6 +120,7 @@ int readQuestion(char *path, LIST_ *lista, const unsigned int level) {
       break;
   }
   fclose(file);
-  randomize(lista);
+  for (int x = 0; x < 2; x++)
+    randomize(lista);
   return 0;
 }
