@@ -10,6 +10,8 @@ void strcopy(const char *a, char *b, const unsigned int padding) {
   for (; x < TABLE_LEN || a[x + 1] == 0; x++) {
     if (a[x] == '_')
       b[x - padding] = ' ';
+    else if (a[x] == '>')
+      b[x - padding] = '-';
     else
       b[x - padding] = a[x];
   }

@@ -77,10 +77,27 @@ short widownia(char *av, LIST_ *lista, char *widzowie) {
   */
   return 1;
 }
-short tel_przyjaciela(char *av, LIST_ *lista) {
+short tel_przyjaciela(char *av, LIST_ *lista, char *widzowie) {
   if (~(*av) & 64)
     return 0;
   *av -= 64;
+  char sum = 0;
+  char holder;
+  for (int x = 0; x < 4; x++) {
+    widzowie[x] = rand() % 25;
+    sum += widzowie[x];
+  }
+  widzowie[lista->trueQ - 1] += rand() % 22;
+  if (sum >= 95) {
+    holder = rand() % 5;
+    if (widzowie[holder] - 15 < 0)
+      widzowie[holder] = 0;
+    else
+      widzowie[holder] -= 15;
+  }
+  widzowie[4] = 100 - sum;
+  widzowie[lista->trueQ - 1] += widzowie[4];
+
   return 1;
 }
 short zamiana(char *av, LIST_ *lista, long *toc, unsigned long len) {

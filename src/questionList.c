@@ -7,8 +7,12 @@ int is_used(long *toc, int val) {
   (*toc) = *toc + (1 << val);
   return 0;
 }
+char czemu(char a) {
+  return (a == 1 || a == 2 || a == 3 || a == 4);
+} // nie jestem z tego dumny
 void genQuestions(LIST *lista, long *toc) {
   int randomI, randomQ;
+  char bad = 0;
   int amm = sizeof(AMMOUNT) / sizeof(short);
   // long toc[amm];
   for (int x = 0; x < amm; x++)
@@ -20,8 +24,18 @@ void genQuestions(LIST *lista, long *toc) {
       x--;
       continue;
     }
-    append(lista);
+    if (!bad)
+      append(lista);
     readQuestion(&(FILES[randomI][0]), value(lista), randomQ);
+    if (!czemu(value(lista)->trueQ) || value(lista)->q1[0] == 0 ||
+        value(lista)->q2[0] == 0 || value(lista)->q3[0] == 0 ||
+        value(lista)->q4[0] == 0 || value(lista)->question[0] == 0) {
+      x--;
+      bad = 1;
+      continue;
+    }
+    if (bad)
+      bad = 0;
   }
 }
 void genQuestion(LIST_ *lista, long *toc) {
@@ -31,10 +45,15 @@ void genQuestion(LIST_ *lista, long *toc) {
   for (int x = 0; x < 1; x++) {
     randomI = rand() % amm;
     randomQ = (rand() % AMMOUNT[randomI]) + 1;
-    if (is_used(&toc[randomI], randomQ)) {
+    if (is_used(&toc[randomI], randomQ - 1)) {
       x--;
       continue;
     }
     readQuestion(&(FILES[randomI][0]), lista, randomQ);
+    if (!czemu(lista->trueQ) || lista->q1[0] == 0 || lista->q2[0] == 0 ||
+        lista->q3[0] == 0 || lista->q4[0] == 0 || lista->question[0] == 0) {
+      x--;
+      continue;
+    }
   }
 }
