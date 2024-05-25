@@ -2,7 +2,7 @@
 #include "questionList.h"
 #include <stdio.h>
 #include <stdlib.h>
-/*
+/**
  * na pół                  -16 gut
  * zapytaj widownie        -32
  * telefon do przyjaciela  -64
@@ -52,7 +52,6 @@ short widownia(char *av, LIST_ *lista, char *widzowie) {
   if (~(*av) & 32)
     return 0;
   *av -= 32;
-  // char widzowie[5];
   char sum = 0;
   char holder;
   for (int x = 0; x < 4; x++) {
@@ -68,13 +67,6 @@ short widownia(char *av, LIST_ *lista, char *widzowie) {
       widzowie[holder] -= 15;
   }
   widzowie[4] = 100 - sum;
-  /*
-  for (int x = 0; x < 5; x++) {
-    if (x == lista->trueQ - 1)
-      printf("| ");
-    printf("%d\n", widzowie[x]);
-  }
-  */
   return 1;
 }
 short tel_przyjaciela(char *av, LIST_ *lista, char *widzowie) {

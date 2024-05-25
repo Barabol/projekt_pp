@@ -48,12 +48,12 @@ void pop(LIST *lista) {
   if (lista->pointing == NULL)
     return;
   LIST_ *holder = lista->pointing->next;
-  switch (len(lista)) {
+  switch (s_len(lista)) {
   case 1:
     free(lista->pointing);
     lista->pointing = NULL;
     return;
-  case 2:
+  default:
     free(holder);
     lista->pointing->next = lista->pointing;
     return;

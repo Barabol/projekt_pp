@@ -23,6 +23,12 @@
 #include <stdlib.h>
 #include <time.h>
 // a
+
+/*! \fn short goodQuestion(const float x, const float y)
+    \brief
+    \param x
+    \param y
+*/
 short goodQuestion(const float x, const float y) {
   for (int i = 0; i < 4; i++) {
     if (x >= BUTTONS[i][0] && x <= BUTTONS[i][0] + BUTTON_SIZE[0] &&
@@ -36,6 +42,17 @@ short goodQuestion(const float x, const float y) {
   }
   return -1;
 }
+
+/*! \fn void draw_messagebox(ALLEGRO_FONT *font[2], ALLEGRO_BITMAP *bg[2], char
+   type, char *text, char round, unsigned long seed) \brief Funkcja renderujaca
+   message box z informacja o wygranej. \param font Czcionka. \param bg \param
+   type Typ message box'a, ktory ma zostac wyswietlony. \param text
+   Niewykorzystywana zmienna. \param round Informacja o rundzie. \param seed
+   Informacja o seed'dzie. Na podstawie informacji o tym, czy gra wykorzystuje
+   custom'owy seed, funkcja poda nowe pytania, lub pytania z danego seed'a.
+    Funkcja generuje przyciski z odpowiedziami, kolami ratunkowymi itp., w
+   skrocie gre.
+*/
 void draw_messagebox(ALLEGRO_FONT *font[2], ALLEGRO_BITMAP *bg[2], char type,
                      char *text, char round, unsigned long seed) {
   al_draw_bitmap(bg[0], 0, 0, 0);
@@ -73,6 +90,15 @@ void draw_messagebox(ALLEGRO_FONT *font[2], ALLEGRO_BITMAP *bg[2], char type,
     break;
   }
 }
+
+/*! \fn char gameloop(time_t seed, const char is_seaded, ALLEGRO_DISPLAY
+   *display) \brief Funkcja tworzaca nowe podejscie. \param seed Przechowuje
+   informacje o seedzie. \param is_seaded Przechowuje informacje o tym, czy gra
+   wykorzystuje custom'owy seed. \param display Okno aplikacji. Na podstawie
+   informacji o tym, czy gra wykorzystuje custom'owy seed, funkcja poda nowe
+   pytania, lub pytania z danego seed'a. Funkcja generuje przyciski z
+   odpowiedziami, kolami ratunkowymi itp., w skrocie gre.
+*/
 char gameloop(time_t seed, const char is_seaded, ALLEGRO_DISPLAY *display) {
   if (is_seaded)
     srand(seed);
@@ -97,8 +123,6 @@ char gameloop(time_t seed, const char is_seaded, ALLEGRO_DISPLAY *display) {
   short quest_ = 0;
   char msgbox[2] = {0, 0};
   char round = 0;
-  // printf("> działa\n");
-  //
   ALLEGRO_BITMAP *sed = al_load_bitmap("src/img/seed.png");
   ALLEGRO_BITMAP *msg[2] = {al_load_bitmap("src/img/bg.png"),
                             al_load_bitmap("src/img/msg.png")};
@@ -134,19 +158,16 @@ char gameloop(time_t seed, const char is_seaded, ALLEGRO_DISPLAY *display) {
   ALLEGRO_SAMPLE *sound = NULL;
   ALLEGRO_SAMPLE *button_click =
       al_load_sample("./src/sfx/extra/buttonclick.wav");
-  ALLEGRO_SAMPLE *croud = al_load_sample("./src/sfx/croud/canttakemore.wav");
 
   ALLEGRO_SAMPLE_INSTANCE *sound_list = NULL;
 
   ALLEGRO_SAMPLE_INSTANCE *sounds = al_create_sample_instance(button_click);
 
-  sound = al_load_sample("./src/sfx/sountrack/Bus_Selection_Screen.ogg");
+  sound = al_load_sample("./src/sfx/sountrack/m1.wav");
   sound_list = al_create_sample_instance(sound);
   al_set_sample_instance_playmode(sound_list, ALLEGRO_PLAYMODE_LOOP);
   al_attach_sample_instance_to_mixer(sound_list, al_get_default_mixer());
   al_attach_sample_instance_to_mixer(sounds, al_get_default_mixer());
-
-  // al_play_sample_instance(sound_list);
 
   ALLEGRO_EVENT event;
   al_start_timer(timer);
@@ -157,6 +178,7 @@ char gameloop(time_t seed, const char is_seaded, ALLEGRO_DISPLAY *display) {
   ALLEGRO_FONT *fontholder[2] = {font, fontmsg};
   float MouseY, MouseX;
   float MouseY_, MouseX_;
+  al_play_sample_instance(sound_list);
   while (active || waiting || wait) {
     al_wait_for_event(queue, &event);
 
@@ -316,7 +338,6 @@ char gameloop(time_t seed, const char is_seaded, ALLEGRO_DISPLAY *display) {
       }
       break;
     case ALLEGRO_EVENT_MOUSE_AXES:
-      // zwolnić dzwięki z pamięci jak i mixer sounds
       if (wait || waiting)
         continue;
       MouseX = event.mouse.x;
@@ -331,7 +352,6 @@ char gameloop(time_t seed, const char is_seaded, ALLEGRO_DISPLAY *display) {
       }
       break;
     case 10:
-      // printf("> %i\n", event.keyboard.keycode);
 
       switch (event.keyboard.keycode) {
       case 59:
@@ -361,11 +381,8 @@ char gameloop(time_t seed, const char is_seaded, ALLEGRO_DISPLAY *display) {
       }
       break;
     }
-    // for (int x = 0; x < 4; x++)
-    //  textures[x] = 0;
   }
   al_destroy_sample(sound);
-  al_destroy_sample(croud);
   al_destroy_sample(button_click);
   al_destroy_sample_instance(sound_list);
   al_destroy_sample_instance(sounds);
@@ -388,6 +405,14 @@ char gameloop(time_t seed, const char is_seaded, ALLEGRO_DISPLAY *display) {
   free(pytania);
   return in_game;
 }
+
+/*! \fn char parser(char str[11], unsigned int *index, unsigned int keycode)
+    \brief Funkcja sprawdzajaca, czy seed jest prawidlowy
+    \param str
+    \param index
+    \param keycode
+
+*/
 char parser(char str[11], unsigned int *index, unsigned int keycode) {
   if (*index < 10 && keycode > 26 && keycode < 37) {
     str[*index] = keycode + 21;
@@ -404,6 +429,15 @@ char parser(char str[11], unsigned int *index, unsigned int keycode) {
   }
   return 0;
 }
+
+/*! \fn char gamemenu(ALLEGRO_DISPLAY *display, time_t *seed, char *is_seaded)
+    \brief Funkcja tworząca menu gry.
+    \param display Okno aplikacji.
+    \param seed Zapis danego podejscia.
+    \param is_seaded Zmienna podajaca informacje, czy gra jest zaseedowana.
+    Jesli gra jest zaseedowana, wyrenderowana zostaje dodatkowa ikonka podczas
+   tworzenia nowego podejscia.
+*/
 char gamemenu(ALLEGRO_DISPLAY *display, time_t *seed, char *is_seaded) {
   ALLEGRO_SAMPLE *button_click =
       al_load_sample("./src/sfx/extra/buttonclick.wav");
@@ -481,7 +515,6 @@ char gamemenu(ALLEGRO_DISPLAY *display, time_t *seed, char *is_seaded) {
       if (x > MENU_BUTTONS[0][0] && x < MENU_BUTTONS[0][0] + BUTTON_SIZE[0]) {
         if (y > MENU_BUTTONS[0][1] && y < MENU_BUTTONS[0][1] + BUTTON_SIZE[1]) {
           go_game = 1;
-          // active = 0;
           *seed = strtol(str, NULL, 16);
           *is_seaded = 0;
           wait = FRAMES;

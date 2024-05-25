@@ -4,7 +4,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+/**
+ * \enum status_
+ * 
+*/
 enum status_ { NONE = 0, QUESTION = 1, Q1 = 2, Q2 = 3, Q3 = 4, Q4 = 5 };
+
+/*! \fn void strcopy(const char *a, char *b, const unsigned int padding)
+    \brief Funkcja ktora zamienia znaki w 
+    \param a Tekst do przetworzenia
+    \param b 
+    \param padding
+*/
 void strcopy(const char *a, char *b, const unsigned int padding) {
   int x = padding;
   for (; x < TABLE_LEN || a[x + 1] == 0; x++) {
@@ -17,29 +28,37 @@ void strcopy(const char *a, char *b, const unsigned int padding) {
   }
   b[x + 1 - padding] = 0;
 }
+
+/*! \fn void addQ(char index, char *text, const unsigned int is_true, LIST_ *lista)
+    \brief Funkcja ktora losuje kolejnosc odpowiedzi danej struktury.
+    \param index Struktura zawierajaca odpowiedzi, ktore chcemy wymieszac.
+    \param text 
+    \param is_true
+    \param lista
+*/
 void addQ(char index, char *text, const unsigned int is_true, LIST_ *lista) {
-  // printf("> %d\n", index);
   switch (index) {
   case Q1:
-    // strcpy(&(lista->q1[0]), text);
     strcopy(text, &(lista->q1[0]), is_true);
     break;
   case Q2:
-    // strcpy(&(lista->q2[0]), text);
     strcopy(text, &(lista->q2[0]), is_true);
     break;
   case Q3:
-    // strcpy(&(lista->q3[0]), text);
     strcopy(text, &(lista->q3[0]), is_true);
     break;
   case Q4:
-    // strcpy(&(lista->q4[0]), text);
     strcopy(text, &(lista->q4[0]), is_true);
     break;
   }
   if (is_true)
     lista->trueQ = index - 1;
 }
+
+/*! \fn void randomize(LIST_ *lista)
+    \brief Funkcja ktora losuje kolejnosc odpowiedzi danej struktury.
+    \param lista Struktura zawierajaca odpowiedzi, ktore chcemy wymieszac.
+*/
 void randomize(LIST_ *lista) {
   char G[TABLE_LEN];
   char *a1, *a2, *a3;
@@ -50,7 +69,6 @@ label:
   b = rand() & 3;
   if (a == b)
     goto label;
-  // printf("%d,%d\n", a, b);
   switch (a) {
   case 0:
     a2 = &(lista->q1[0]);
@@ -97,7 +115,6 @@ int readQuestion(char *path, LIST_ *lista, const unsigned int level) {
   while (!feof(file)) {
 
     fscanf(file, "%s", buffor);
-    // printf("> %s\n", buffor);
     if (buffor[0] == '-')
       index++;
     if (index != level)
@@ -110,7 +127,6 @@ int readQuestion(char *path, LIST_ *lista, const unsigned int level) {
       break;
     case '-':
       status = QUESTION;
-      // strcpy(&(lista->question[0]), &buffor[0]);
       strcopy(&buffor[0], &(lista->question[0]), 1);
       break;
     default:

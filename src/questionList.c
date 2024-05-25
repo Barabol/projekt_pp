@@ -1,12 +1,23 @@
 #include "questionList.h"
 #include "fileread.h"
 #include <stdlib.h>
+
+/*! \fn int is_used(long *toc, int val)
+    \brief Funkcja sprawdzajaca czy 
+    \param toc
+    \param val
+*/
 int is_used(long *toc, int val) {
   if ((*toc) & (1 << val))
     return 1;
   (*toc) = *toc + (1 << val);
   return 0;
 }
+
+/*! \fn char czemu(char a)
+    \brief Szymon nie jest z tego dumny.
+    \param a Sprawdzana wartosc.
+*/
 char czemu(char a) {
   return (a == 1 || a == 2 || a == 3 || a == 4);
 } // nie jestem z tego dumny
@@ -14,7 +25,6 @@ void genQuestions(LIST *lista, long *toc) {
   int randomI, randomQ;
   char bad = 0;
   int amm = sizeof(AMMOUNT) / sizeof(short);
-  // long toc[amm];
   for (int x = 0; x < amm; x++)
     toc[x] = 0;
   for (int x = 0; x < 12; x++) {
@@ -41,7 +51,6 @@ void genQuestions(LIST *lista, long *toc) {
 void genQuestion(LIST_ *lista, long *toc) {
   int randomI, randomQ;
   int amm = sizeof(AMMOUNT) / sizeof(short);
-  // long toc[amm];
   for (int x = 0; x < 1; x++) {
     randomI = rand() % amm;
     randomQ = (rand() % AMMOUNT[randomI]) + 1;
