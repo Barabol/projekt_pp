@@ -47,44 +47,47 @@ typedef struct table_root {
 } LIST;
 
 /*! \fn extern LIST *new_list()
-    \brief Funkcja bezparametrowa tworzaca nowa liste.
+    \brief Funkcja bezparametrowa tworzaca nowa liste i ja zwraca.
 */
 extern LIST *new_list();
 
 /*! \fn extern int append(LIST *)
-    \brief Funkcja dodajaca nowa instancje do ciagu struktur.
+    \brief Funkcja dodajaca nowa instancje do ciagu struktur zwraca int.
     \param LIST * Wskaznik na ciag struktur, do ktorego chcemy dodac nowa
    strukture.
 */
 extern int append(LIST *);
 
 /*! \fn extern void next(LIST *);
-    \brief Funkcja przechodzaca do nastepnego elementu ciagu struktur typu
-   LIST_. \param LIST * Wskaznik na ciag struktur, po ktorym chcemy sie
-   poruszyc.
+    \brief Funkcja przechodzaca do nastepnego elementu ciagu struktur typu nic
+   nie zwraca. LIST_.
+   \param LIST * Wskaznik na ciag struktur, po ktorym chcemy
+   sie poruszyc.
 */
 extern void next(LIST *);
 
 /*! \fn extern unsigned int len(LIST *)
-    \brief Funkcja sprawdzajaca dlugosc listy.
+    \brief Funkcja sprawdzajaca dlugosc listy i ja zwraca.
     \param LIST * Wskaznik na ciag struktur, ktorego dlugosc chcemy sprawdzic.
 */
 extern unsigned int len(LIST *);
 
 /*! \fn extern unsigned int s_len(LIST *)
-    \brief Funkcja sprawdzajaca przedzial dlugosci listy.
-    \param LIST * Wskaznik na ciag struktur, ktorego dlugosc chcemy sprawdzic.
+    \brief Funkcja sprawdzajaca przedzial dlugosci listy i zwraca przedzial
+   dlogosci listy.
+   \param LIST * Wskaznik na ciag struktur, ktorego dlugosc
+   chcemy sprawdzic.
 */
 extern unsigned int s_len(LIST *);
 
 /*! \fn extern void clear(LIST *)
-    \brief Funkcja czyszczaca liste.
+    \brief Funkcja czyszczaca liste i nic nie zwraca.
     \param LIST * Wskaznik na ciag struktur, ktory chcemy wyczyscic.
 */
 extern void clear(LIST *);
 
 /*! \fn extern void pop(LIST *)
-    \brief Funkcja usuwajaca element ciagu struktur typu LIST_.
+    \brief Funkcja usuwajaca element ciagu struktur typu LIST_ nic nie zwraca.
     \param LIST * Wskaznik na element ciagu struktur, ktory chcemy usunac.
 */
 extern void pop(LIST *);
